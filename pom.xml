@@ -12,9 +12,11 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <allure-testng.version>2.17.2</allure-testng.version>
+        <allure-junit5.version>2.17.2</allure-junit5.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <junit-platform-surefire-provider.version>1.3.2</junit-platform-surefire-provider.version>
         <aspectj.version>1.9.8</aspectj.version>
+        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
     </properties>
 
     <build>
@@ -41,22 +43,26 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <includes>
+                        <include>org.example.*</include>
+                    </includes>
+                    <testFailureIgnore>false</testFailureIgnore>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
-                    <systemProperties>
-                        <property>
-                            <name>allure.results.directory</name>
-                            <value>${project.build.directory}/allure-results</value>
-                        </property>
-                    </systemProperties>
+                    <systemPropertyVariables>
+                        <allure.results.directory>${allure.results.directory}</allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>${junit-platform-surefire-provider.version}</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjweaver</artifactId>
@@ -69,6 +75,13 @@
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>2.11.2</version>
+                <configuration>
+                    <resultsDirectory>${allure.results.directory}</resultsDirectory>
+                    <reportVersion>2.17.2</reportVersion>
+                    <allureDownloadUrl>
+                        https://github.com/allure-framework/allure2/releases/download/2.17.2/allure-2.17.2.zip
+                    </allureDownloadUrl>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -87,13 +100,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--testng-->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.5</version>
-            <scope>test</scope>
-        </dependency>
+        <!--junit-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -105,24 +112,18 @@
             <version>1.7.35</version>
         </dependency>
 
-        <!--allure-->
         <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-testng</artifactId>
-            <version>${allure-testng.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure-junit5.version}</version>
+        </dependency>
 
-    <reporting>
-        <excludeDefaults>true</excludeDefaults>
-        <plugins>
-            <plugin>
-                <groupId>io.qameta.allure</groupId>
-                <artifactId>allure-maven</artifactId>
-                <version>2.11.2</version>
-            </plugin>
-        </plugins>
-    </reporting>
+    </dependencies>
 </project>

@@ -1,3 +1,5 @@
+package org.example;
+
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.handler.soap.SOAPHandler;
@@ -68,7 +70,6 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
             final ByteArrayOutputStream streamOut = new ByteArrayOutputStream();
             final StreamResult result = new StreamResult(streamOut);
             transformer.transform(message.getSOAPPart().getContent(), result);
-            String formattedSoap = streamOut.toString();
 
             if (isThisIsRequestAction) {
                 request.write(streamOut.toByteArray());
