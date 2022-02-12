@@ -37,7 +37,7 @@ public class NumberTests {
     @Test
     public void testNumberConversion1() {
         String result = getPort().numberToWords(BigInteger.valueOf(1234));
-        Assertions.assertEquals(result.trim(), "one thousand two hundred and thirty four");
+        Assertions.assertEquals(result, "one thousand two hundred and thirty four");
     }
 
     @Test
