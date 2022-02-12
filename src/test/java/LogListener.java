@@ -6,46 +6,38 @@ import org.testng.ITestResult;
 import java.io.ByteArrayOutputStream;
 
 public class LogListener implements ITestListener {
-    private final ByteArrayOutputStream request = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream response = new ByteArrayOutputStream();
+    public static final ByteArrayOutputStream request = new ByteArrayOutputStream();
+    public static final ByteArrayOutputStream response = new ByteArrayOutputStream();
 
-    public void onTestSuccess(ITestResult iTestResult) {
+    @Override
+    public void onTestSuccess(ITestResult result) {
         logRequest(request);
         logResponse(response);
     }
 
     public void onTestFailure(ITestResult iTestResult) {
-        onTestSuccess(iTestResult);
+        logRequest(request);
+        logResponse(response);
+    }
+
+    @Override
+    public void onFinish(ITestContext context) {
+        System.out.println("FINISH");
     }
 
     @Attachment(value = "request")
-    public byte[] logRequest(ByteArrayOutputStream stream) {
+    public static byte[] logRequest(ByteArrayOutputStream stream) {
         return attach(stream);
     }
 
     @Attachment(value = "response")
-    public byte[] logResponse(ByteArrayOutputStream stream) {
+    public static byte[] logResponse(ByteArrayOutputStream stream) {
         return attach(stream);
     }
 
-    public byte[] attach(ByteArrayOutputStream log) {
+    public static byte[] attach(ByteArrayOutputStream log) {
         byte[] array = log.toByteArray();
         log.reset();
         return array;
-    }
-
-    public void onTestStart(ITestResult iTestResult) {
-    }
-
-    public void onTestSkipped(ITestResult iTestResult) {
-
-    }
-
-    public void onTestFailedButWithinSuccessPercentage(ITestResult iTestResult) {
-
-    }
-
-    public void onFinish(ITestContext iTestContext) {
-
     }
 }
