@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-//@Listeners(LogListener.class)
+@Listeners(LogListener.class)
 public class SaleOrderResponseTest {
     private NumberConversionSoapType getPort() {
         NumberConversion service = new NumberConversion();
@@ -28,9 +28,7 @@ public class SaleOrderResponseTest {
     @Test
     public void testNumberConversion1() {
         String result = getPort().numberToWords(BigInteger.valueOf(1234));
-        Assert.assertEquals(result.trim(), "one thousand two hundred and thirty four");
-        LogListener.logRequest(LogListener.request);
-        LogListener.logResponse(LogListener.response);
+        Assert.assertEquals(result, "one thousand two hundred and thirty four");
     }
 
     @Test

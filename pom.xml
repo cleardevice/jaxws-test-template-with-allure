@@ -11,9 +11,11 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <encoding>UTF-8</encoding>
 
         <allure-testng.version>2.17.2</allure-testng.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
         <aspectj.version>1.9.8</aspectj.version>
     </properties>
 
@@ -45,16 +47,16 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <excludes>
+                        <exclude/>
+                    </excludes>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
-                    <systemProperties>
-                        <property>
-                            <name>allure.results.directory</name>
-                            <value>${project.build.directory}/allure-results</value>
-                        </property>
-                    </systemProperties>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <systemPropertyVariables>
+                        <allure.results.directory>${allure.results.directory}</allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -69,6 +71,13 @@
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>2.11.2</version>
+                <configuration>
+                    <resultsDirectory>${allure.results.directory}</resultsDirectory>
+                    <reportVersion>2.17.2</reportVersion>
+                    <allureDownloadUrl>
+                        https://github.com/allure-framework/allure2/releases/download/2.17.2/allure-2.17.2.zip
+                    </allureDownloadUrl>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -114,15 +123,4 @@
         </dependency>
 
     </dependencies>
-
-    <reporting>
-        <excludeDefaults>true</excludeDefaults>
-        <plugins>
-            <plugin>
-                <groupId>io.qameta.allure</groupId>
-                <artifactId>allure-maven</artifactId>
-                <version>2.11.2</version>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

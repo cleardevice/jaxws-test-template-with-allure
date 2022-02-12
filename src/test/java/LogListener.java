@@ -1,28 +1,20 @@
 import io.qameta.allure.Attachment;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
 
 import java.io.ByteArrayOutputStream;
 
-public class LogListener implements ITestListener {
+public class LogListener implements IInvokedMethodListener {
     public static final ByteArrayOutputStream request = new ByteArrayOutputStream();
     public static final ByteArrayOutputStream response = new ByteArrayOutputStream();
 
     @Override
-    public void onTestSuccess(ITestResult result) {
-        logRequest(request);
-        logResponse(response);
-    }
-
-    public void onTestFailure(ITestResult iTestResult) {
-        logRequest(request);
-        logResponse(response);
-    }
-
-    @Override
-    public void onFinish(ITestContext context) {
-        System.out.println("FINISH");
+    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+        if (testResult.getStatus() == ITestResult.FAILURE) {
+            logRequest(request);
+            logResponse(response);
+        }
     }
 
     @Attachment(value = "request")
@@ -35,7 +27,7 @@ public class LogListener implements ITestListener {
         return attach(stream);
     }
 
-    public static byte[] attach(ByteArrayOutputStream log) {
+    private static byte[] attach(ByteArrayOutputStream log) {
         byte[] array = log.toByteArray();
         log.reset();
         return array;
