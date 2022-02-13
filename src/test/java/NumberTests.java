@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 @Listeners(LogListener.class)
-public class SaleOrderResponseTest {
+public class NumberTests {
     private NumberConversionSoapType getPort() {
         NumberConversion service = new NumberConversion();
         NumberConversionSoapType numberConversionSoap = service.getNumberConversionSoap();
